@@ -1,0 +1,108 @@
+/* ===== Title ===== */
+.title {
+  text-align: center;
+  margin: 20px;
+  font-family: Arial, sans-serif;
+  color: #011326;
+}
+
+/* ===== Top Bar ===== */
+.top-bar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.dropdown {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.top-bar button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #1cb879;
+  color: rgb(229, 23, 23);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.top-bar button:hover {
+  background-color: #005fa3;
+  Color: white;
+}
+
+/* ===== Filter Bar ===== */
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-bar select,
+.filter-bar input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.filter-bar button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e74c3c;
+  color: white;
+  cursor: pointer;
+}
+
+.filter-bar button:hover {
+  background-color: #c0392b;
+}
+
+/* ===== Table ===== */
+.data-table {
+  width: 95%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  background-color: rgb(235, 179, 179);
+}
+
+/* Header */
+.data-table th {
+  background-color: YELLOW;
+  color: black;
+  padding: 12px;
+  text-align: left;
+  text-transform: capitalize;
+}
+
+/* Rows */
+.data-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+/* Alternate row color */
+.data-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover effect */
+.data-table tbody tr:hover {
+  background-color: #e6f2ff;
+}
+
+/* ===== Image ===== */
+.table-img {
+  width: 60px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}

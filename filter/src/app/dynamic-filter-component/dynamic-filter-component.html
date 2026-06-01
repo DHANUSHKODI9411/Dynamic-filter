@@ -1,0 +1,65 @@
+<h2 class="title">DYNAMIC TABLE FILTER</h2>
+
+<div class="top-bar">
+  <select #fileSel (change)="changeData(fileSel.value)" class="dropdown">
+    <option value="cars.json">Cars</option>
+    <option value="e-commerce.json">E-Commerce</option>
+    <option value="employee.json">Employee</option>
+  </select>
+
+  <button (click)="changeData(fileSel.value)">LOAD DATA</button>
+</div>
+
+
+<div class="filter-bar">
+
+  <select #colSel (change)="selectedColumn = colSel.value">
+    <option value="">Select Column</option>
+
+    <option *ngFor="let key of tableKeys" [value]="key">
+      {{ key }}
+    </option>
+
+  </select>
+
+  <select>
+    <option value="contains">Contains</option>
+  </select>
+
+  <input type="text"
+         placeholder="Enter to filter..."
+         #txt
+         (input)="applyContainsFilter(txt.value)" />
+
+</div>
+
+<table class="data-table">
+
+  <thead>
+    <tr>
+      <th *ngFor="let key of tableKeys">
+                {{ key }}
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of data">
+
+      <td *ngFor="let key of tableKeys">
+
+        <ng-container *ngIf="key === 'image'; else normal">
+          <!-- <img [src]="item[key]" class="table-img" /> -->
+       
+        </ng-container>
+
+        <ng-template #normal>
+                {{ item[key] }}
+        </ng-template>
+
+      </td>
+
+    </tr>
+  </tbody>
+
+</table>

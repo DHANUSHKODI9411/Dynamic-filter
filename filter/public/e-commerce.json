@@ -1,0 +1,12 @@
+[
+  { "orderId": "ORD1001", "customer": "Rahul", "product": "Laptop", "quantity": 1, "price": 75000, "status": "Shipped" },
+  { "orderId": "ORD1002", "customer": "Neha", "product": "Phone", "quantity": 2, "price": 40000, "status": "Delivered" },
+  { "orderId": "ORD1003", "customer": "Amit", "product": "Headphones", "quantity": 3, "price": 6000, "status": "Pending" },
+  { "orderId": "ORD1004", "customer": "Pooja", "product": "Tablet", "quantity": 1, "price": 30000, "status": "Delivered" },
+  { "orderId": "ORD1005", "customer": "Kiran", "product": "Camera", "quantity": 1, "price": 50000, "status": "Shipped" },
+  { "orderId": "ORD1006", "customer": "Lavanya", "product": "Watch", "quantity": 2, "price": 8000, "status": "Cancelled" },
+  { "orderId": "ORD1007", "customer": "Manoj", "product": "Keyboard", "quantity": 1, "price": 2000, "status": "Delivered" },
+  { "orderId": "ORD1008", "customer": "Deepa", "product": "Mouse", "quantity": 2, "price": 1500, "status": "Pending" },
+  { "orderId": "ORD1009", "customer": "Arvind", "product": "Monitor", "quantity": 1, "price": 12000, "status": "Shipped" },
+  { "orderId": "ORD1010", "customer": "Swathi", "product": "Printer", "quantity": 1, "price": 9000, "status": "Delivered" }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "brand": "Toyota",
+    "model": "Camry",
+    "year": 2022,
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "price": 3500000,
+    "color": "Black",
+    "mileage": 18,
+    "seatingCapacity": 5
+  },
+  {
+    "id": 2,
+    "brand": "Honda",
+    "model": "Civic",
+    "year": 2023,
+    "fuelType": "Petrol",
+    "transmission": "Manual",
+    "price": 3200000,
+    "color": "White",
+    "mileage": 17,
+    "seatingCapacity": 5
+  },
+  {
+    "id": 3,
+    "brand": "Hyundai",
+    "model": "Verna",
+    "year": 2021,
+    "fuelType": "Diesel",
+    "transmission": "Automatic",
+    "price": 2800000,
+    "color": "Silver",
+    "mileage": 21,
+    "seatingCapacity": 5
+  },
+  {
+    "id": 4,
+    "brand": "Ford",
+    "model": "EcoSport",
+    "year": 2020,
+    "fuelType": "Diesel",
+    "transmission": "Manual",
+    "price": 2500000,
+    "color": "Blue",
+    "mileage": 19,
+    "seatingCapacity": 5
+  },
+  {
+    "id": 5,
+    "brand": "BMW",
+    "model": "X5",
+    "year": 2023,
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "price": 7500000,
+    "color": "Grey",
+    "mileage": 12,
+    "seatingCapacity": 5
+  },
+  {
+    "id": 6,
+    "brand": "Audi",
+    "model": "A6",
+    "year": 2022,
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "price": 6800000,
+    "color": "Red",
+    "mileage": 14,
+    "seatingCapacity": 5
+  },
+  {
+    "id": 7,
+    "brand": "Tesla",
+    "model": "Model 3",
+    "year": 2023,
+    "fuelType": "Electric",
+    "transmission": "Automatic",
+    "price": 6000000,
+    "color": "White",
+    "mileage": 0,
+    "seatingCapacity": 5
+  },
+  {
+    "id": 8,
+    "brand": "Mahindra",
+    "model": "XUV700",
+    "year": 2022,
+    "fuelType": "Diesel",
+    "transmission": "Automatic",
+    "price": 3000000,
+    "color": "Black",
+    "mileage": 20,
+    "seatingCapacity": 7
+  },
+  {
+    "id": 9,
+    "brand": "Tata",
+    "model": "Harrier",
+    "year": 2021,
+    "fuelType": "Diesel",
+    "transmission": "Manual",
+    "price": 2700000,
+    "color": "Orange",
+    "mileage": 18,
+    "seatingCapacity": 5
+  },
+  {
+    "id": 10,
+    "brand": "Kia",
+    "model": "Seltos",
+    "year": 2023,
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "price": 2900000,
+    "color": "Yellow",
+    "mileage": 16,
+    "seatingCapacity": 5
+  }
+]
