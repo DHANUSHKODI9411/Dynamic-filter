@@ -1,0 +1,17 @@
+[
+  { "BookID": 1, "Title": "The Great Gatsby", "Author": "F. Scott Fitzgerald", "Availability": "Available" },
+  { "BookID": 2, "Title": "To Kill a Mockingbird", "Author": "Harper Lee", "Availability": "Checked Out" },
+  { "BookID": 3, "Title": "1984", "Author": "George Orwell", "Availability": "Available" },
+  { "BookID": 4, "Title": "Pride and Prejudice", "Author": "Jane Austen", "Availability": "Available" },
+  { "BookID": 5, "Title": "The Catcher in the Rye", "Author": "J.D. Salinger", "Availability": "Checked Out" },
+  { "BookID": 6, "Title": "Moby Dick", "Author": "Herman Melville", "Availability": "Available" },
+  { "BookID": 7, "Title": "War and Peace", "Author": "Leo Tolstoy", "Availability": "Available" },
+  { "BookID": 8, "Title": "The Hobbit", "Author": "J.R.R. Tolkien", "Availability": "Checked Out" },
+  { "BookID": 9, "Title": "Brave New World", "Author": "Aldous Huxley", "Availability": "Available" },
+  { "BookID": 10, "Title": "Crime and Punishment", "Author": "Fyodor Dostoevsky", "Availability": "Available" },
+  { "BookID": 11, "Title": "The Alchemist", "Author": "Paulo Coelho", "Availability": "Checked Out" },
+  { "BookID": 12, "Title": "The Lord of the Rings", "Author": "J.R.R. Tolkien", "Availability": "Available" },
+  { "BookID": 13, "Title": "Jane Eyre", "Author": "Charlotte Brontë", "Availability": "Available" },
+  { "BookID": 14, "Title": "The Chronicles of Narnia", "Author": "C.S. Lewis", "Availability": "Checked Out" },
+  { "BookID": 15, "Title": "Harry Potter and the Sorcerer's Stone", "Author": "J.K. Rowling", "Availability": "Available" }
+]

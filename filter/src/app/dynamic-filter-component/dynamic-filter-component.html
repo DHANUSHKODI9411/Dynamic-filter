@@ -5,6 +5,7 @@
     <option value="cars.json">Cars</option>
     <option value="e-commerce.json">E-Commerce</option>
     <option value="employee.json">Employee</option>
+    <option value="library.json">Library</option>
   </select>
 
   <button (click)="changeData(fileSel.value)">LOAD DATA</button>
@@ -13,23 +14,56 @@
 
 <div class="filter-bar">
 
-  <select #colSel (change)="selectedColumn = colSel.value">
+  <!-- Column dropdown -->
+  <select #colSel (change)="selectedColumn = colSel.value; onColumnChange()">
     <option value="">Select Column</option>
 
     <option *ngFor="let key of tableKeys" [value]="key">
       {{ key }}
     </option>
-
   </select>
 
-  <select>
+  <!-- ✅ Operator dropdown -->
+  <select #opSel (change)="selectedOperator = opSel.value">
     <option value="contains">Contains</option>
+    <option value="range">Range</option>
   </select>
 
-  <input type="text"
+  <!-- ✅ Text input (for contains) -->
+  <input *ngIf="selectedOperator === 'contains'"
+         type="text"
          placeholder="Enter to filter..."
          #txt
-         (input)="applyContainsFilter(txt.value)" />
+         (input)="applyFilterUnified(txt.value)" />
+
+  <!-- ✅ Range inputs -->
+  <ng-container *ngIf="selectedOperator === 'range'">
+
+    
+<!-- ✅ Min dropdown -->
+<select #minVal>
+  <option value="">Min</option>
+
+  <option *ngFor="let val of rangeValues" [value]="val">
+    {{ val }}
+  </option>
+</select>
+
+<!-- ✅ Max dropdown -->
+<select #maxVal>
+  <option value="">Max</option>
+
+  <option *ngFor="let val of rangeValues" [value]="val">
+    {{ val }}
+  </option>
+</select>
+
+
+    <button (click)="applyFilterUnified(minVal.value, maxVal.value)">
+      Apply
+    </button>
+
+  </ng-container>
 
 </div>
 
