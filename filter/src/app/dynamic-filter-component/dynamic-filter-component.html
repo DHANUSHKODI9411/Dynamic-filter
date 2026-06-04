@@ -1,78 +1,107 @@
 <h2 class="title">DYNAMIC TABLE FILTER</h2>
 
 <div class="top-bar">
-  <select #fileSel (change)="changeData(fileSel.value)" class="dropdown">
-    <option value="cars.json">Cars</option>
-    <option value="e-commerce.json">E-Commerce</option>
-    <option value="employee.json">Employee</option>
-    <option value="library.json">Library</option>
+
+  <!-- ✅ Dataset -->
+  <select [(ngModel)]="selectedDataset">
+    <option value="">Select Dataset</option>
+    <option value="Cars">Cars</option>
+    <option value="Employee">Employee</option>
+    <option value="Ecommerce">Ecommerce</option>
+    <option value="Library">Library</option>
   </select>
 
-  <button (click)="changeData(fileSel.value)">LOAD DATA</button>
-</div>
+  <!-- ✅ Load button -->
+  <button (click)="loadData()">
+    Load {{ selectedDataset }}
+  </button>
 
+</div>
 
 <div class="filter-bar">
 
-  <!-- Column dropdown -->
-  <select #colSel (change)="selectedColumn = colSel.value; onColumnChange()">
-    <option value="">Select Column</option>
+  <div class="filter-row">
 
-    <option *ngFor="let key of tableKeys" [value]="key">
-      {{ key }}
-    </option>
-  </select>
+    <div class="field-group">
+      <label class="filter-label">Column</label>
+      <select [(ngModel)]="selectedColumn" (change)="onColumnChange()">
+        <option value="">Select Column</option>
+        <option *ngFor="let key of tableKeys" [value]="key">
+          {{ key }}
+        </option>
+      </select>
+    </div>
 
-  <!-- ✅ Operator dropdown -->
-  <select #opSel (change)="selectedOperator = opSel.value">
-    <option value="contains">Contains</option>
-    <option value="range">Range</option>
-  </select>
+    <div class="field-group">
+      <label class="filter-label">Operator</label>
+      <select [(ngModel)]="selectedOperator">
+        <option value="contains">Contains</option>
+        <option value="range">Range</option>
+      </select>
+    </div>
 
-  <!-- ✅ Text input (for contains) -->
-  <input *ngIf="selectedOperator === 'contains'"
-         type="text"
-         placeholder="Enter to filter..."
-         #txt
-         (input)="applyFilterUnified(txt.value)" />
+  </div>
 
-  <!-- ✅ Range inputs -->
-  <ng-container *ngIf="selectedOperator === 'range'">
+  <!-- CONTAINS -->
+  <div *ngIf="selectedOperator === 'contains'" class="filter-row">
 
-    
-<!-- ✅ Min dropdown -->
-<select #minVal>
-  <option value="">Min</option>
+    <div class="field-group">
+      <label class="filter-label">Search</label>
+      <input [(ngModel)]="searchValue" placeholder="Enter value..." />
+    </div>
 
-  <option *ngFor="let val of rangeValues" [value]="val">
-    {{ val }}
-  </option>
-</select>
+    <div class="button-group">
+      <button class="apply-btn" (click)="applyFilterUnified(searchValue)">
+        Apply
+      </button>
+      <button class="reset-btn" (click)="resetFilter()">
+        Reset
+      </button>
+    </div>
 
-<!-- ✅ Max dropdown -->
-<select #maxVal>
-  <option value="">Max</option>
+  </div>
 
-  <option *ngFor="let val of rangeValues" [value]="val">
-    {{ val }}
-  </option>
-</select>
+  <!-- RANGE -->
+  <div *ngIf="selectedOperator === 'range'" class="filter-row">
 
+    <div class="field-group">
+      <label class="filter-label">Min</label>
+      <select [(ngModel)]="minValue">
+        <option value="">Min</option>
+        <option *ngFor="let val of rangeValue" [value]="val">
+          {{ val }}
+        </option>
+      </select>
+    </div>
 
-    <button (click)="applyFilterUnified(minVal.value, maxVal.value)">
-      Apply
-    </button>
+    <div class="field-group">
+      <label class="filter-label">Max</label>
+      <select [(ngModel)]="maxValue">
+        <option value="">Max</option>
+        <option *ngFor="let val of rangeValue" [value]="val">
+          {{ val }}
+        </option>
+      </select>
+    </div>
 
-  </ng-container>
+    <div class="button-group">
+      <button class="apply-btn" (click)="applyFilterUnified(minValue, maxValue)">
+        Apply
+      </button>
+      <button class="reset-btn" (click)="resetFilter()">
+        Reset
+      </button>
+    </div>
+
+  </div>
 
 </div>
-
 <table class="data-table">
 
   <thead>
     <tr>
       <th *ngFor="let key of tableKeys">
-                {{ key }}
+        {{ key }}
       </th>
     </tr>
   </thead>
@@ -81,16 +110,7 @@
     <tr *ngFor="let item of data">
 
       <td *ngFor="let key of tableKeys">
-
-        <ng-container *ngIf="key === 'image'; else normal">
-          <!-- <img [src]="item[key]" class="table-img" /> -->
-       
-        </ng-container>
-
-        <ng-template #normal>
-                {{ item[key] }}
-        </ng-template>
-
+        {{ item[key] }}
       </td>
 
     </tr>

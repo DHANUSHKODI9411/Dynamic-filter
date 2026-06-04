@@ -1,166 +1,93 @@
 import { Component, OnInit } from '@angular/core';
 import { DynamicFilterService } from '../dynamic-filter-service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dynamic-filter-component',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './dynamic-filter-component.html',
   styleUrl: './dynamic-filter-component.css',
 })
-export class DynamicFilterComponent  implements OnInit { 
+export class DynamicFilterComponent implements OnInit {
 
-  public data : any[] =[]; // for data in table
-  public tableKeys : string[] = []; // for table title
-  public selectedFile : string = 'cars.json'; // default file
-  public originalData : any[] = []; // for original data
-  public filterKeys : string[]=[] // for filter keys
-  public activeFilters : any = {}; // for active filters
-  public filter : any ={}; // for dropdown
-  public selectedColumn : string =''; // for selected column in dropdown
-  public selectedOperator : string =''; // for selected operator in dropdown
-  public rangeValues : number[] = []; // for range filter values
+  public data: any[] = []; //  holds the data to be displayed in the table
+  public tableKeys: string[] = [];//  holds the keys of the data objects for dynamic table headers
 
+  public selectedDataset: string = 'Cars'; // default dataset
+  public selectedColumn: string = ''; // holds the currently selected column for filtering
+  public selectedOperator: string = 'contains'; // holds the currently selected filter operator (e.g., contains, equals, greater than, etc.)
 
-  constructor( private dynamicFilterService : DynamicFilterService) {} 
+  public searchValue: string = ''; // holds the value entered by the user for filtering
+  public minValue: number | null = null; // holds the minimum value for range filters (e.g., greater than)
+  public maxValue: number | null = null; // holds the maximum value for range filters (e.g., less than)
+
+  public rangeValue: number [] = [] ; // holds the range values for range filters (e.g., between)
+
+  constructor(private dynamicFilterService: DynamicFilterService) {}
 
   ngOnInit(): void {
-    this.loadData(); 
+    this.loadData();
   }
 
-  loadData(){
-    this.dynamicFilterService.loadData(this.selectedFile).subscribe((data: any[]) => {
+  // ✅ LOAD DATA
+  loadData() {
+    this.dynamicFilterService.getData(this.selectedDataset)
+      .subscribe((data: any) => {
 
-      this.originalData = data; // store original data
-      this.data = data; // set data for table
-      this.tableKeys = Object.keys(data[0]); // set table keys
-     
-    });
-  }
-  changeData(file: string){
-    this.selectedFile = file;
-    this.loadData(); 
-  }
-  // method to apply filter based on selected column and value
-  applyFilter(key: string, value: any){
-    this.activeFilters[key] = value; 
+        this.data = data;
 
-    this.data = this.originalData.filter((item) => {
-      for (let key in this.activeFilters) { 
-        if (item[key] !== this.activeFilters[key]) { 
-          return false; 
+        if (data.length > 0) {
+          this.tableKeys = Object.keys(data[0]);
         }
-      }
-      return true; 
-    });
+
+        this.rangeValue =[];
+      });
   }
-  onColumnChange() {
 
-  // extract values from selected column
-  const values = this.originalData
-    .map(item => Number(item[this.selectedColumn]))
-    .filter(val => !isNaN(val));
+  resetFilter() {
 
-  // ✅ unique + sorted
-  this.rangeValues = [...new Set(values)].sort((a, b) => a - b);
-  console.log(this.rangeValues);
+  // ✅ clear filter fields
+  this.searchValue = '';
+  this.minValue = null;
+  this.maxValue = null;
+
+  this.selectedColumn = '';
+  this.selectedOperator = 'contains';
+
+  // ✅ reload original data
+  this.loadData();
 }
-  // method to apply contains filter based on selected column and value
-//   applyContainsFilter(value: string){
 
-//   if (!this.selectedColumn || !value) {
-//     this.data = this.originalData;
-//     return;
-//   }
+onColumnChange() {
 
-//   this.data = this.originalData.filter(item => {
-//     const columnValue = String(item[this.selectedColumn]).toLowerCase();
+  const value = this.data
+    .map((item) => item[this.selectedColumn])
+    .filter((val) => val !== null && val !== undefined);
 
-//     return columnValue.includes(value.toLowerCase());
-//   });
-// }
-//   applyRangeFilter(min: any, max: any) {
-
-//   const minValue = Number(min);
-//   const maxValue = Number(max);
-
-//   if (!this.selectedColumn || isNaN(minValue) || isNaN(maxValue)) {
-//     this.data = this.originalData;
-//     return;
-//   }
-
-//   this.data = this.originalData.filter(item => {
-//     const val = Number(item[this.selectedColumn]);
-
-//     return val >= minValue && val <= maxValue;
-//   });
-// }
-
-// unified method to apply both contains and range filters based on selected operator
+  this.rangeValue = [... new Set(value)].sort((a, b) => a - b); } // unique values for dropdown
+  // ✅ APPLY FILTER
   applyFilterUnified(val: any, max?: any) {
 
-  if (!this.selectedColumn) {
-    this.data = this.originalData;
-    return;
-  }
+    if (!this.selectedColumn) return;
 
-  // ✅ Contains filter
-  if (this.selectedOperator === 'contains') {
+    const params = {
+      dataset: this.selectedDataset, // dataset to filter (e.g., Cars, Employees, etc.)
+      column: this.selectedColumn, // column to filter on (e.g., Make, Model, Price, etc.)
+      filterType: this.selectedOperator, // type of filter (e.g., contains, equals, greater than, less than, between, etc.)
+      value: val, // value to filter by (e.g., "Toyota", 50000, etc.)
+      max: max // optional max value for range filters (e.g., less than, between, etc.)
+    };
 
-    if (!val) {
-      this.data = this.originalData;
-      return;
-    }
+    this.dynamicFilterService.getFilteredData(params)
+      .subscribe((res: any) => {
 
-    this.data = this.originalData.filter(item =>
-      String(item[this.selectedColumn])
-        .toLowerCase()
-        .includes(val.toLowerCase())
-    );
-  }
+        this.data = res;
 
-  // ✅ Improved Range filter
-if (this.selectedOperator === 'range') {
-
-  const minValue = Number(val);
-  const maxValue = Number(max);
-
-  this.data = this.originalData.filter(item => {
-
-    const num = Number(item[this.selectedColumn]);
-
-    // ✅ Skip non-numeric values
-    if (isNaN(num)) {
-      return true;
-    }
-
-    // ✅ Only min provided
-    if (!isNaN(minValue) && isNaN(maxValue)) {
-      return num >= minValue;
-    }
-
-    // ✅ Only max provided
-    if (isNaN(minValue) && !isNaN(maxValue)) {
-      return num <= maxValue;
-    }
-
-    // ✅ Both provided
-    if (!isNaN(minValue) && !isNaN(maxValue)) {
-
-      // ✅ Validate range
-      if (minValue > maxValue) {
-        alert("Min value cannot be greater than Max");
-        return true;
-      }
-
-      return num >= minValue && num <= maxValue;
-    }
-
-    // ✅ No filter applied
-    return true;
-  });
-}
+        if (res.length > 0) {
+          this.tableKeys = Object.keys(res[0]);
+        }
+      });
   }
 }
-

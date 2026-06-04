@@ -1,0 +1,64 @@
+# =========================
+# ✅ GET ALL DATA
+# =========================
+
+http://localhost:5180/api/data/Cars
+http://localhost:5180/api/data/Employee
+http://localhost:5180/api/data/Ecommerce
+http://localhost:5180/api/data/Library
+
+
+# =========================
+# 🚗 CARS FILTER
+# =========================
+
+http://localhost:5180/api/data/filter?dataset=Cars&column=Brand&filterType=contains&value=ta
+
+http://localhost:5180/api/data/filter?dataset=Cars&column=Price&filterType=range&value=2000000&max=5000000
+
+http://localhost:5180/api/data/filter?dataset=Cars&column=Year&filterType=range&value=2021&max=2023
+
+
+# =========================
+# 👨‍💼 EMPLOYEE FILTER
+# =========================
+
+http://localhost:5180/api/data/filter?dataset=Employee&column=Department&filterType=contains&value=it
+
+http://localhost:5180/api/data/filter?dataset=Employee&column=Salary&filterType=range&value=35000&max=60000
+
+
+# =========================
+# 🛒 ECOMMERCE FILTER
+# =========================
+
+http://localhost:5180/api/data/filter?dataset=Ecommerce&column=Status&filterType=contains&value=delivered
+
+http://localhost:5180/api/data/filter?dataset=Ecommerce&column=Price&filterType=range&value=5000&max=50000
+
+http://localhost:5180/api/data/filter?dataset=Ecommerce&column=Quantity&filterType=range&value=1&max=2
+
+
+# =========================
+# 📚 LIBRARY FILTER
+# =========================
+
+http://localhost:5180/api/data/filter?dataset=Library&column=Author&filterType=contains&value=tol
+
+http://localhost:5180/api/data/filter?dataset=Library&column=Title&filterType=contains&value=the
+
+http://localhost:5180/api/data/filter?dataset=Library&column=Availability&filterType=contains&value=available
+
+
+# =========================
+# 🔍 EDGE TESTS
+# =========================
+
+# Only Min
+http://localhost:5180/api/data/filter?dataset=Cars&column=Price&filterType=range&value=3000000
+
+# Only Max
+http://localhost:5180/api/data/filter?dataset=Cars&column=Price&filterType=range&max=5000000
+
+# Invalid Column
+http://localhost:5180/api/data/filter?dataset=Cars&column=XYZ&filterType=contains&value=a

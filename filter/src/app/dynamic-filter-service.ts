@@ -1,16 +1,24 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DynamicFilterService {
 
+  private baseUrl = "http://localhost:5180/api/data";
+
   constructor(private http: HttpClient) {}
 
-  loadData(fileName: string) {
-    return this.http.get<any[]>(`/${fileName}`);
+  // call backend filter API
+  getFilteredData(params: any) {
+    return this.http.get(`${this.baseUrl}/filter`, { params });
   }
+
+  // initial load
   
+getData(dataset: string) {
+  return this.http.get(`${this.baseUrl}/${dataset}`);
 }
 
+}
