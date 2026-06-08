@@ -13,6 +13,7 @@ http://localhost:5180/api/data/Library
 # =========================
 
 http://localhost:5180/api/data/filter?dataset=Cars&column=Brand&filterType=contains&value=ta
+http://localhost:5180/API/data/filter?Cars&column=Model&filterType=contains&value=ta
 
 http://localhost:5180/api/data/filter?dataset=Cars&column=Price&filterType=range&value=2000000&max=5000000
 

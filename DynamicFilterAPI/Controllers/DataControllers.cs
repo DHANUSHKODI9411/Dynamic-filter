@@ -16,56 +16,11 @@ namespace DynamicFilterAPI.Controllers
             "Cars",
             "Employee",
             "Ecommerce",
-            "Library"
+            "Library",
         };
 
-        // ✅ GET DATASET
-        [HttpGet("{dataset}")]
-        public IActionResult GetData(string dataset)
+        private List<Dictionary<string, object>> ExecuteQuery(string query)
         {
-            if (!allowedTables.Contains(dataset))
-                return BadRequest("Invalid dataset"); // if data not allowed stop 
-
-            var data = new List<Dictionary<string, object>>();
-
-            using (SqlConnection dataflow = new SqlConnection(connectionString))
-            {
-                dataflow.Open();
-
-                string query = $"SELECT * FROM {dataset}"; // get all data from selected table
-                SqlCommand cmd = new SqlCommand(query, dataflow);
-
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    var row = new Dictionary<string, object>(); // row object
-
-                    for (int i = 0; i < reader.FieldCount; i++) // looping col
-                    {
-                        row[reader.GetName(i)] = reader.GetValue(i);
-                    }
-
-                    data.Add(row);
-                }
-
-                reader.Close();
-            }
-
-            return Ok(data);
-        }
-
-        //FILTER API WITH DATASET
-        [HttpGet("filter")]
-        public IActionResult GetFilteredData(
-            string dataset,
-            string column,
-            string filterType,
-            string? value,
-            string? max)
-        {
-            if (!allowedTables.Contains(dataset))
-                return BadRequest("Invalid dataset");
 
             var data = new List<Dictionary<string, object>>();
 
@@ -73,9 +28,7 @@ namespace DynamicFilterAPI.Controllers
             {
                 conn.Open();
 
-                string query = $"SELECT * FROM {dataset}";
                 SqlCommand cmd = new SqlCommand(query, conn);
-
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -92,6 +45,39 @@ namespace DynamicFilterAPI.Controllers
 
                 reader.Close();
             }
+
+            return data;
+        }
+        // GET DATASET
+
+        [HttpGet("{dataset}")]
+        public IActionResult GetData(string dataset)
+        {
+            if (!allowedTables.Contains(dataset))
+                return BadRequest("Invalid dataset");
+
+            string query = $"SELECT * FROM {dataset}";
+            var data = ExecuteQuery(query);
+
+            return Ok(data);
+        }
+
+        //FILTER API WITH DATASET
+        [HttpGet("filter")]
+        public IActionResult GetFilteredData(
+            string dataset,
+            string column,
+            string filterType,
+            string? value,
+            string? max)
+        {
+
+            if (!allowedTables.Contains(dataset))
+                return BadRequest("Invalid dataset");
+
+            string query = $"SELECT * FROM {dataset}";
+            var data = ExecuteQuery(query);
+
 
             //  CONTAINS FILTER
             if (filterType == "contains" && !string.IsNullOrEmpty(value))

@@ -2,7 +2,7 @@
 
 <div class="top-bar">
 
-  <!-- ✅ Dataset -->
+  <!--  Dataset -->
   <select [(ngModel)]="selectedDataset">
     <option value="">Select Dataset</option>
     <option value="Cars">Cars</option>
@@ -11,7 +11,7 @@
     <option value="Library">Library</option>
   </select>
 
-  <!-- ✅ Load button -->
+  <!--  Load button -->
   <button (click)="loadData()">
     Load {{ selectedDataset }}
   </button>
@@ -36,7 +36,7 @@
       <label class="filter-label">Operator</label>
       <select [(ngModel)]="selectedOperator">
         <option value="contains">Contains</option>
-        <option value="range">Range</option>
+        <option *ngIf="isnumber" value="range">Range</option>
       </select>
     </div>
 
