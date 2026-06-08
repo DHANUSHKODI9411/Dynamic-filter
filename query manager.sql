@@ -29,6 +29,11 @@ INSERT INTO Cars VALUES
 (9, 'Tata', 'Nexon', 2021, 'Electric', 'Automatic', 3000000, 'Blue', 0, 5),
 (10, 'Skoda', 'Octavia', 2022, 'Petrol', 'Automatic', 4500000, 'Grey', 14, 5);
 
+-------------------------updated tables and vales-------------------------
+update cars set mileage = 7 where model = 'Model 3';
+update cars set mileage = 11 where model = 'Nexon';
+
+
 -- table for e-commerce products
 CREATE TABLE Ecommerce (
     OrderId VARCHAR(20) PRIMARY KEY,

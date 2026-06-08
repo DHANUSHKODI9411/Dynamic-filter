@@ -1,4 +1,4 @@
-/* ✅ GLOBAL */
+/* - GLOBAL */
 body {
   font-family: 'Inter', 'Segoe UI', sans-serif;
   background: #f4f6f9;
@@ -7,16 +7,16 @@ body {
   color: #2c3e50;
 }
 
-/* ✅ TITLE */
+/* - TITLE */
 .title {
   text-align: center;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 600;
-  color: #1f3c88;
+  color: #643d0b;
   margin-bottom: 25px;
 }
 
-/* ✅ TOP BAR */
+/* - TOP BAR */
 .top-bar {
   display: flex;
   justify-content: center;
@@ -24,7 +24,7 @@ body {
   margin-bottom: 25px;
 }
 
-/* ✅ FILTER CARD */
+/* - FILTER CARD */
 .filter-bar {
   width: 92%;
   margin: 0 auto 25px auto;
@@ -35,7 +35,7 @@ body {
   border: 1px solid #eaeaea;
 }
 
-/* ✅ ROW */
+/* - ROW */
 .filter-row {
   display: flex;
   gap: 20px;
@@ -44,14 +44,14 @@ body {
   margin-bottom: 18px;
 }
 
-/* ✅ FIELD */
+/* - FIELD */
 .field-group {
   display: flex;
   flex-direction: column;
   min-width: 180px;
 }
 
-/* ✅ LABEL */
+/* - LABEL */
 .filter-label {
   font-size: 13px;
   color: #6c757d;
@@ -59,7 +59,7 @@ body {
   font-weight: 500;
 }
 
-/* ✅ INPUTS */
+/* - INPUTS */
 select,
 input {
   padding: 10px 12px;
@@ -70,7 +70,7 @@ input {
   transition: all 0.2s ease;
 }
 
-/* ✅ FOCUS */
+/* - FOCUS */
 select:focus,
 input:focus {
   border-color: #4c84ff;
@@ -78,7 +78,7 @@ input:focus {
   outline: none;
 }
 
-/* ✅ BUTTON GROUP */
+/* - BUTTON GROUP */
 .button-group {
   display: flex;
   gap: 12px;
@@ -86,10 +86,10 @@ input:focus {
   justify-content: center;
 }
 
-/* ✅ APPLY BUTTON */
+/* - APPLY BUTTON */
 .apply-btn {
   background: linear-gradient(135deg, #4c84ff, #6fa8ff);
-  color: white;
+  color: rgb(214, 23, 23);
   border: none;
   padding: 10px 22px;
   border-radius: 10px;
@@ -103,7 +103,7 @@ input:focus {
   box-shadow: 0 4px 10px rgba(76,132,255,0.3);
 }
 
-/* ✅ RESET BUTTON */
+/* - RESET BUTTON */
 .reset-btn {
   background: #eef1f6;
   color: #555;
@@ -117,16 +117,16 @@ input:focus {
   background: #dfe4ea;
 }
 
-/* ✅ TABLE */
+/* - TABLE */
 
-/* ✅ DATA TABLE */
+/* - DATA TABLE */
 .data-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-/* ✅ HEADER */
+/* - HEADER */
 .data-table th {
   background-color: #222;
   color: #ffd700;
@@ -134,19 +134,19 @@ input:focus {
   border: 1px solid #444;
 }
 
-/* ✅ CELLS */
+/* - CELLS */
 .data-table td {
   padding: 10px;
   border: 1px solid #333;
   text-align: center;
 }
 
-/* ✅ ROW HOVER */
+/* - ROW HOVER */
 .data-table tbody tr:hover {
   background-color: #1f1f1f;
 }
 
-/* ✅ RESPONSIVE */
+/* - RESPONSIVE */
 @media (max-width: 768px) {
   .filter-bar {
     flex-direction: column;
@@ -159,12 +159,12 @@ input:focus {
   }
 }
 
-/* ✅ ROW HOVER */
+/* - ROW HOVER */
 .data-table tbody tr:hover {
   background: #f5f9ff;
 }
 
-/* ✅ BUTTON (TOP BAR) */
+/* - BUTTON (TOP BAR) */
 .top-bar button {
   background: #4c84ff;
   color: white;
@@ -178,7 +178,7 @@ input:focus {
   background: #3a6de0;
 }
 
-/* ✅ RESPONSIVE */
+/* - RESPONSIVE */
 @media (max-width: 768px) {
   .filter-row {
     flex-direction: column;

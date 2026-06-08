@@ -15,7 +15,7 @@ export class DynamicFilterComponent implements OnInit {
   public data: any[] = []; //  data for table
   public tableKeys: string[] = [];// keys of the data objects for dynamic table headers
 
-  public selectedDataset: string = 'Cars'; // default dataset
+  public selectedDataset: string = ''; // default dataset
   public selectedColumn: string = ''; // selected column for filtering
   public selectedOperator: string = 'contains'; // selected filter operator 
 
@@ -23,10 +23,10 @@ export class DynamicFilterComponent implements OnInit {
   public minValue: number | null = null; // minimum value for range filters 
   public maxValue: number | null = null; // maximum value for range filters 
 
-  public rangeValue: number [] = [] ; // holds the range values for range filters 
+  public rangeValue: number[] = []; // holds the range values for range filters 
 
-  public isnumber : boolean = false;
-  constructor(private dynamicFilterService: DynamicFilterService) {}
+  public isnumber: boolean = false;
+  constructor(private dynamicFilterService: DynamicFilterService) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -44,47 +44,47 @@ export class DynamicFilterComponent implements OnInit {
           this.tableKeys = Object.keys(data[0]);
         }
 
-        this.rangeValue =[];
+        this.rangeValue = [];
       });
   }
 
   resetFilter() {
 
-  // for clear filter fields
-  this.searchValue = '';
-  this.minValue = null;
-  this.maxValue = null;
+    // for clear filter fields
+    this.searchValue = '';
+    this.minValue = null;
+    this.maxValue = null;
 
-  this.selectedColumn = '';
-  this.selectedOperator = 'contains';
-
-  // for reload original data
-  this.loadData();
-}
-onColumnChange() {
-
-  const values = this.data
-    .map(item => item[this.selectedColumn]);
-
-  // ✅ Check if numeric
-  this.isnumber = values.every(val => !isNaN(val));
-
-  // ✅ Prepare range values only if numeric
-  if (this.isnumber) {
-    const numericValues = values
-      .map(val => Number(val));
-
-    this.rangeValue = [...new Set(numericValues)]
-      .sort((a, b) => a - b);
-  } else {
-    this.rangeValue = [];
-  }
-
-  // ✅ reset operator if invalid
-  if (!this.isnumber && this.selectedOperator === 'range') {
+    this.selectedColumn = '';
     this.selectedOperator = 'contains';
+
+    // for reload original data
+    this.loadData();
   }
-}
+  onColumnChange() {
+
+    const values = this.data
+      .map(item => item[this.selectedColumn]);
+
+    // Check if numeric
+    this.isnumber = values.every(val => !isNaN(val));
+
+    // Prepare range values only if numeric
+    if (this.isnumber) {
+      const numericValues = values
+        .map(val => Number(val));
+
+      this.rangeValue = [...new Set(numericValues)]
+        .sort((a, b) => a - b);
+    } else {
+      this.rangeValue = [];
+    }
+
+    // reset operator if invalid
+    if (!this.isnumber && this.selectedOperator === 'range') {
+      this.selectedOperator = 'contains';
+    }
+  }
 
   // FOR APPLY FILTER
   applyFilterUnified(val: any, max?: any) {

@@ -12,7 +12,7 @@
   </select>
 
   <!--  Load button -->
-  <button (click)="loadData()">
+  <button (click)="loadData()" [disabled]="!selectedDataset">
     Load {{ selectedDataset }}
   </button>
 
@@ -67,8 +67,8 @@
     <div class="field-group">
       <label class="filter-label">Min</label>
       <select [(ngModel)]="minValue">
-        <option value="">Min</option>
-        <option *ngFor="let val of rangeValue" [value]="val">
+        <option value="">Select Min value</option>
+        <option *ngFor="let val of rangeValue.filter(v => !maxValue || v < maxValue)" [value]="val">
           {{ val }}
         </option>
       </select>
@@ -76,11 +76,14 @@
 
     <div class="field-group">
       <label class="filter-label">Max</label>
+
       <select [(ngModel)]="maxValue">
-        <option value="">Max</option>
-        <option *ngFor="let val of rangeValue" [value]="val">
+        <option value="">Select Max value</option>
+
+        <option *ngFor="let val of rangeValue.filter(v => !minValue || v > minValue)" [value]="val">
           {{ val }}
         </option>
+
       </select>
     </div>
 
