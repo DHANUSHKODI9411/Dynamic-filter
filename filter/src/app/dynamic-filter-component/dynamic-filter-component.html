@@ -1,8 +1,8 @@
 <h2 class="title">DYNAMIC TABLE FILTER</h2>
 
+<!-- ✅ TOP BAR -->
 <div class="top-bar">
 
-  <!--  Dataset -->
   <select [(ngModel)]="selectedDataset">
     <option value="">Select Dataset</option>
     <option value="Cars">Cars</option>
@@ -11,94 +11,126 @@
     <option value="Library">Library</option>
   </select>
 
-  <!--  Load button -->
   <button (click)="loadData()" [disabled]="!selectedDataset">
     Load {{ selectedDataset }}
   </button>
 
 </div>
 
+<!-- ✅ FILTER CARD -->
 <div class="filter-bar">
 
   <div class="filter-row">
 
-    <div class="field-group">
-      <label class="filter-label">Column</label>
-      <select [(ngModel)]="selectedColumn" (change)="onColumnChange()">
-        <option value="">Select Column</option>
-        <option *ngFor="let key of tableKeys" [value]="key">
-          {{ key }}
-        </option>
-      </select>
+    <!-- ✅ LEFT SIDE -->
+    <div class="left-group">
+
+      <!-- Column -->
+      <div class="field-group">
+        <label class="filter-label">Column</label>
+        <select [(ngModel)]="selectedColumn" (change)="onColumnChange()">
+          <option value="">Select Column</option>
+          <option *ngFor="let key of tableKeys" [value]="key">
+            {{ key }}
+          </option>
+        </select>
+      </div>
+
+      <!-- ✅ SORT BELOW COLUMN -->
+      <div class="field-group sort-group">
+        <label class="filter-label">Sort</label>
+
+        <div class="sort-buttons">
+
+          <button class="asc-btn" (click)="sortAsc()" [disabled]="!selectedColumn">
+            Sort Ascending
+          </button>
+
+          <button class="desc-btn" (click)="sortDesc()" [disabled]="!selectedColumn">
+            Sort Descending
+          </button>
+
+        </div>
+      </div>
+
     </div>
 
-    <div class="field-group">
-      <label class="filter-label">Operator</label>
-      <select [(ngModel)]="selectedOperator">
-        <option value="contains">Contains</option>
-        <option *ngIf="isnumber" value="range">Range</option>
-      </select>
-    </div>
+    <!-- ✅ RIGHT SIDE -->
+    <div class="right-group">
 
-  </div>
+      <!-- Operator -->
+      <div class="field-group">
+        <label class="filter-label">Operator</label>
+        <select [(ngModel)]="selectedOperator">
+          <option value="contains">Contains</option>
+          <option *ngIf="isnumber" value="range">Range</option>
+        </select>
+      </div>
 
-  <!-- CONTAINS -->
-  <div *ngIf="selectedOperator === 'contains'" class="filter-row">
+      <!-- ✅ CONTAINS -->
+      <div *ngIf="selectedOperator === 'contains'">
 
-    <div class="field-group">
-      <label class="filter-label">Search</label>
-      <input [(ngModel)]="searchValue" placeholder="Enter value..." />
-    </div>
+        <div class="field-group">
+          <label class="filter-label">Search</label>
+          <input [(ngModel)]="searchValue" placeholder="Enter value..." />
+        </div>
 
-    <div class="button-group">
-      <button class="apply-btn" (click)="applyFilterUnified(searchValue)">
-        Apply
-      </button>
-      <button class="reset-btn" (click)="resetFilter()">
-        Reset
-      </button>
-    </div>
+        <div class="button-group">
+          <button class="apply-btn" (click)="applyFilterUnified(searchValue)">
+            Apply
+          </button>
 
-  </div>
+          <button class="reset-btn" (click)="resetFilter()">
+            Reset
+          </button>
+        </div>
 
-  <!-- RANGE -->
-  <div *ngIf="selectedOperator === 'range'" class="filter-row">
+      </div>
 
-    <div class="field-group">
-      <label class="filter-label">Min</label>
-      <select [(ngModel)]="minValue">
-        <option value="">Select Min value</option>
-        <option *ngFor="let val of rangeValue.filter(v => !maxValue || v < maxValue)" [value]="val">
-          {{ val }}
-        </option>
-      </select>
-    </div>
+      <!-- ✅ RANGE -->
+      <div *ngIf="selectedOperator === 'range'">
 
-    <div class="field-group">
-      <label class="filter-label">Max</label>
+        <div class="field-group">
+          <label class="filter-label">Min</label>
+          <select [(ngModel)]="minValue">
+            <option value="">Select Min value</option>
 
-      <select [(ngModel)]="maxValue">
-        <option value="">Select Max value</option>
+            <option *ngFor="let val of rangeValue.filter(v => !maxValue || v < maxValue)" [value]="val">
+              {{ val }}
+            </option>
+          </select>
+        </div>
 
-        <option *ngFor="let val of rangeValue.filter(v => !minValue || v > minValue)" [value]="val">
-          {{ val }}
-        </option>
+        <div class="field-group">
+          <label class="filter-label">Max</label>
+          <select [(ngModel)]="maxValue">
+            <option value="">Select Max value</option>
 
-      </select>
-    </div>
+            <option *ngFor="let val of rangeValue.filter(v => !minValue || v > minValue)" [value]="val">
+              {{ val }}
+            </option>
+          </select>
+        </div>
 
-    <div class="button-group">
-      <button class="apply-btn" (click)="applyFilterUnified(minValue, maxValue)">
-        Apply
-      </button>
-      <button class="reset-btn" (click)="resetFilter()">
-        Reset
-      </button>
+        <div class="button-group">
+          <button class="apply-btn" (click)="applyFilterUnified(minValue, maxValue)">
+            Apply
+          </button>
+
+          <button class="reset-btn" (click)="resetFilter()">
+            Reset
+          </button>
+        </div>
+
+      </div>
+
     </div>
 
   </div>
 
 </div>
+
+<!-- ✅ TABLE -->
 <table class="data-table">
 
   <thead>
@@ -111,11 +143,9 @@
 
   <tbody>
     <tr *ngFor="let item of data">
-
       <td *ngFor="let key of tableKeys">
         {{ item[key] }}
       </td>
-
     </tr>
   </tbody>
 

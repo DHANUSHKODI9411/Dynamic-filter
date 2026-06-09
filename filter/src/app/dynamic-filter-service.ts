@@ -8,7 +8,7 @@ export class DynamicFilterService {
 
   private baseUrl = "http://localhost:5180/api/data";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // call backend filter API
   getFilteredData(params: any) {
@@ -16,9 +16,14 @@ export class DynamicFilterService {
   }
 
   // initial load
-  
-getData(dataset: string) {
-  return this.http.get(`${this.baseUrl}/${dataset}`);
-}
+
+  getData(dataset: string) {
+    return this.http.get(`${this.baseUrl}/${dataset}`);
+  }
+
+  // call backend sort API
+  getSortedData(params: any) {
+    return this.http.get(`${this.baseUrl}/sort`, { params });
+  }
 
 }

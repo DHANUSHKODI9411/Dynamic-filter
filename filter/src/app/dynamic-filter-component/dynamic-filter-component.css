@@ -1,4 +1,4 @@
-/* - GLOBAL */
+/* ✅ GLOBAL */
 body {
   font-family: 'Inter', 'Segoe UI', sans-serif;
   background: #f4f6f9;
@@ -7,7 +7,7 @@ body {
   color: #2c3e50;
 }
 
-/* - TITLE */
+/* ✅ TITLE */
 .title {
   text-align: center;
   font-size: 30px;
@@ -16,7 +16,7 @@ body {
   margin-bottom: 25px;
 }
 
-/* - TOP BAR */
+/* ✅ TOP BAR */
 .top-bar {
   display: flex;
   justify-content: center;
@@ -24,7 +24,14 @@ body {
   margin-bottom: 25px;
 }
 
-/* - FILTER CARD */
+.top-bar select,
+.top-bar button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+/* ✅ FILTER CARD */
 .filter-bar {
   width: 92%;
   margin: 0 auto 25px auto;
@@ -35,23 +42,36 @@ body {
   border: 1px solid #eaeaea;
 }
 
-/* - ROW */
+/* ✅ MAIN ROW (LEFT + RIGHT SPLIT) */
 .filter-row {
   display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 18px;
+  gap: 40px;
+  align-items: flex-start;
 }
 
-/* - FIELD */
+/* ✅ LEFT SIDE (Column + Sort) */
+.left-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* ✅ RIGHT SIDE (Operator + Search) */
+.right-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+/* ✅ FIELD */
 .field-group {
   display: flex;
   flex-direction: column;
   min-width: 180px;
 }
 
-/* - LABEL */
+/* ✅ LABEL */
 .filter-label {
   font-size: 13px;
   color: #6c757d;
@@ -59,7 +79,7 @@ body {
   font-weight: 500;
 }
 
-/* - INPUTS */
+/* ✅ INPUTS */
 select,
 input {
   padding: 10px 12px;
@@ -70,7 +90,7 @@ input {
   transition: all 0.2s ease;
 }
 
-/* - FOCUS */
+/* ✅ INPUT FOCUS */
 select:focus,
 input:focus {
   border-color: #4c84ff;
@@ -78,18 +98,69 @@ input:focus {
   outline: none;
 }
 
-/* - BUTTON GROUP */
+/* ✅ SORT SECTION */
+.sort-group {
+  margin-top: 5px;
+}
+
+/* ✅ SORT BUTTON CONTAINER */
+.sort-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* ✅ ASC BUTTON */
+.asc-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* ✅ DESC BUTTON */
+.desc-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* ✅ HOVER EFFECT */
+.asc-btn:hover {
+  background: #3e8e41;
+  transform: translateY(-2px);
+}
+
+.desc-btn:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+}
+
+/* ✅ DISABLED */
+.sort-buttons button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* ✅ BUTTON GROUP */
 .button-group {
   display: flex;
   gap: 12px;
-  align-items: flex-end;
-  justify-content: center;
+  margin-top: 10px;
 }
 
-/* - APPLY BUTTON */
+/* ✅ APPLY BUTTON */
 .apply-btn {
   background: linear-gradient(135deg, #4c84ff, #6fa8ff);
-  color: rgb(214, 23, 23);
+  color: #fff;
   border: none;
   padding: 10px 22px;
   border-radius: 10px;
@@ -103,7 +174,7 @@ input:focus {
   box-shadow: 0 4px 10px rgba(76,132,255,0.3);
 }
 
-/* - RESET BUTTON */
+/* ✅ RESET BUTTON */
 .reset-btn {
   background: #eef1f6;
   color: #555;
@@ -117,16 +188,14 @@ input:focus {
   background: #dfe4ea;
 }
 
-/* - TABLE */
-
-/* - DATA TABLE */
+/* ✅ TABLE */
 .data-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-/* - HEADER */
+/* ✅ HEADER */
 .data-table th {
   background-color: #222;
   color: #ffd700;
@@ -134,58 +203,32 @@ input:focus {
   border: 1px solid #444;
 }
 
-/* - CELLS */
+/* ✅ CELL */
 .data-table td {
   padding: 10px;
   border: 1px solid #333;
   text-align: center;
 }
 
-/* - ROW HOVER */
-.data-table tbody tr:hover {
-  background-color: #1f1f1f;
-}
-
-/* - RESPONSIVE */
-@media (max-width: 768px) {
-  .filter-bar {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .top-bar {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-/* - ROW HOVER */
+/* ✅ ROW HOVER */
 .data-table tbody tr:hover {
   background: #f5f9ff;
 }
 
-/* - BUTTON (TOP BAR) */
-.top-bar button {
-  background: #4c84ff;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.top-bar button:hover {
-  background: #3a6de0;
-}
-
-/* - RESPONSIVE */
+/* ✅ RESPONSIVE */
 @media (max-width: 768px) {
   .filter-row {
     flex-direction: column;
-    align-items: center;
+    gap: 20px;
+  }
+
+  .left-group,
+  .right-group {
+    width: 100%;
   }
 
   .top-bar {
     flex-direction: column;
+    align-items: center;
   }
 }

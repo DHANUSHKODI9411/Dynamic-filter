@@ -25,7 +25,9 @@ export class DynamicFilterComponent implements OnInit {
 
   public rangeValue: number[] = []; // holds the range values for range filters 
 
-  public isnumber: boolean = false;
+  public isnumber: boolean = false; // for checking number for column
+
+  public sortOrder: string = ''; // for 
   constructor(private dynamicFilterService: DynamicFilterService) { }
 
   ngOnInit(): void {
@@ -109,4 +111,51 @@ export class DynamicFilterComponent implements OnInit {
         }
       });
   }
+
+  // FOR APPLY SORT 
+
+  sortAsc() {
+
+    if (!this.selectedColumn) return;
+
+    const params = {
+      dataset: this.selectedDataset,
+      sortColumn: this.selectedColumn,
+      sortOrder: 'asc'
+    };
+
+    this.dynamicFilterService.getSortedData(params)
+      .subscribe((res: any) => {
+
+        this.data = res;
+
+        if (res.length > 0) {
+          this.tableKeys = Object.keys(res[0]);
+        }
+      });
+  }
+
+  // SORT DESC
+  sortDesc() {
+
+    if (!this.selectedColumn) return;
+
+    const params = {
+      dataset: this.selectedDataset,
+      sortColumn: this.selectedColumn,
+      sortOrder: 'desc'
+    };
+
+    this.dynamicFilterService.getSortedData(params)
+      .subscribe((res: any) => {
+
+        this.data = res;
+
+        if (res.length > 0) {
+          this.tableKeys = Object.keys(res[0]);
+        }
+      });
+  }
 }
+
+

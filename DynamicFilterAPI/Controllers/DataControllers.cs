@@ -114,5 +114,40 @@ namespace DynamicFilterAPI.Controllers
 
             return Ok(data);
         }
+        // SORT COMPONENT INTERGREATED 
+        [HttpGet("sort")]
+        public IActionResult GetSortedData(
+            string dataset,
+            string sortColumn,
+            string sortOrder)
+        {
+            //  validate dataset
+            if (!allowedTables.Contains(dataset))
+                return BadRequest("Invalid dataset");
+
+            //  load data
+            string query = $"SELECT * FROM {dataset}";
+            var data = ExecuteQuery(query);
+
+            //  Sorting function using linq 
+            if (!string.IsNullOrEmpty(sortColumn))
+            {
+                if (sortOrder == "asc")
+                {
+                    data = data
+                        .OrderBy(item => item.ContainsKey(sortColumn) ? item[sortColumn] : null)
+                        .ToList();
+                }
+                else if (sortOrder == "desc")
+                {
+                    data = data
+                        .OrderByDescending(item => item.ContainsKey(sortColumn) ? item[sortColumn] : null)
+                        .ToList();
+                }
+            }
+
+            return Ok(data);
+        }
+
     }
 }
