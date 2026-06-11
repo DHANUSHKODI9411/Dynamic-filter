@@ -1,6 +1,6 @@
 <h2 class="title">DYNAMIC TABLE FILTER</h2>
 
-<!-- ✅ TOP BAR -->
+<!-- - TOP BAR -->
 <div class="top-bar">
 
   <select [(ngModel)]="selectedDataset">
@@ -16,13 +16,47 @@
   </button>
 
 </div>
+<!-- ✅ MULTI SELECT SECTION -->
+<div *ngIf="selectedColumn" class="multi-select-box">
 
-<!-- ✅ FILTER CARD -->
+  <!-- ✅ SEARCH INPUT -->
+  <input
+    type="text"
+    [(ngModel)]="searchText"
+    (input)="filterDropdown()"
+    placeholder="Search values..."
+    class="multi-search"
+  />
+
+  <!-- ✅ OPTIONS LIST -->
+  <div class="multi-options">
+
+    <label *ngFor="let val of filteredData" class="multi-option">
+
+      <input
+        type="checkbox"
+        [value]="val"
+        (change)="toggleSelection(val)"
+        [checked]="selectedValue.includes(val)"
+      />
+
+      {{ val }}
+
+    </label>
+
+  </div>
+  <button class="apply-btn" (click)="applyMultiFilter()">
+  Apply Filter
+</button>
+
+</div>
+
+<!-- - FILTER CARD -->
 <div class="filter-bar">
 
   <div class="filter-row">
 
-    <!-- ✅ LEFT SIDE -->
+    <!-- - LEFT SIDE -->
     <div class="left-group">
 
       <!-- Column -->
@@ -36,7 +70,7 @@
         </select>
       </div>
 
-      <!-- ✅ SORT BELOW COLUMN -->
+      <!-- - SORT BELOW COLUMN -->
       <div class="field-group sort-group">
         <label class="filter-label">Sort</label>
 
@@ -55,7 +89,7 @@
 
     </div>
 
-    <!-- ✅ RIGHT SIDE -->
+    <!-- - RIGHT SIDE -->
     <div class="right-group">
 
       <!-- Operator -->
@@ -67,7 +101,7 @@
         </select>
       </div>
 
-      <!-- ✅ CONTAINS -->
+      <!-- - CONTAINS -->
       <div *ngIf="selectedOperator === 'contains'">
 
         <div class="field-group">
@@ -87,7 +121,7 @@
 
       </div>
 
-      <!-- ✅ RANGE -->
+      <!-- - RANGE -->
       <div *ngIf="selectedOperator === 'range'">
 
         <div class="field-group">
@@ -130,7 +164,7 @@
 
 </div>
 
-<!-- ✅ TABLE -->
+<!-- - TABLE -->
 <table class="data-table">
 
   <thead>

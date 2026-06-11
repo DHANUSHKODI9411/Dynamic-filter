@@ -232,3 +232,35 @@ input:focus {
     align-items: center;
   }
 }
+.multi-select-box {
+  margin-top: 10px;
+  width: 220px;
+}
+
+/* ✅ search input */
+.multi-search {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+}
+
+/* ✅ dropdown box */
+.multi-options {
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  background: #fff;
+}
+
+/* ✅ each option */
+.multi-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  padding: 4px 0;
+}

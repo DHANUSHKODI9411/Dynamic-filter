@@ -25,5 +25,8 @@ export class DynamicFilterService {
   getSortedData(params: any) {
     return this.http.get(`${this.baseUrl}/sort`, { params });
   }
+   // call backend multi-filter API
+  getMultiFilteredData(params: any) {
+    return this.http.get(`${this.baseUrl}/multi-filter`, { params }); }
 
 }

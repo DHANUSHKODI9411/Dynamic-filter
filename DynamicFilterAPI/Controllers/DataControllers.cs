@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
+using System.Linq;
+using DynamicFilterAPI.Models;
 
 namespace DynamicFilterAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")] // creats base url
+    [Route("api/[controller]")]
     public class DataController : ControllerBase
     {
         private readonly string connectionString =
             "Server=localhost\\SQLEXPRESS;Database=FilterDB;Trusted_Connection=True;";
 
-        // Allowed tables
+        // ✅ Allowed tables
         private readonly List<string> allowedTables = new List<string>
         {
             "Cars",
@@ -19,9 +21,9 @@ namespace DynamicFilterAPI.Controllers
             "Library",
         };
 
+        // ✅ Common method to fetch data
         private List<Dictionary<string, object>> ExecuteQuery(string query)
         {
-
             var data = new List<Dictionary<string, object>>();
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -48,8 +50,8 @@ namespace DynamicFilterAPI.Controllers
 
             return data;
         }
-        // GET DATASET
 
+        // ✅ GET DATASET
         [HttpGet("{dataset}")]
         public IActionResult GetData(string dataset)
         {
@@ -62,7 +64,7 @@ namespace DynamicFilterAPI.Controllers
             return Ok(data);
         }
 
-        //FILTER API WITH DATASET
+        // ✅ FILTER (Single Column)
         [HttpGet("filter")]
         public IActionResult GetFilteredData(
             string dataset,
@@ -71,25 +73,24 @@ namespace DynamicFilterAPI.Controllers
             string? value,
             string? max)
         {
-
             if (!allowedTables.Contains(dataset))
                 return BadRequest("Invalid dataset");
 
             string query = $"SELECT * FROM {dataset}";
             var data = ExecuteQuery(query);
 
-
-            //  CONTAINS FILTER
+            // ✅ CONTAINS
             if (filterType == "contains" && !string.IsNullOrEmpty(value))
             {
+                string search = value.Trim().ToLower();
+
                 data = data.Where(item =>
                     item.ContainsKey(column) &&
-                    item[column].ToString().ToLower()
-                        .Contains(value.ToLower())
+                    item[column]?.ToString()?.ToLower().Contains(search) == true
                 ).ToList();
             }
 
-            //  RANGE FILTER
+            // ✅ RANGE
             if (filterType == "range")
             {
                 double minVal = string.IsNullOrEmpty(value)
@@ -105,7 +106,7 @@ namespace DynamicFilterAPI.Controllers
                     if (!item.ContainsKey(column)) return true;
 
                     double num;
-                    if (!double.TryParse(item[column].ToString(), out num))
+                    if (!double.TryParse(item[column]?.ToString(), out num))
                         return true;
 
                     return num >= minVal && num <= maxVal;
@@ -114,40 +115,70 @@ namespace DynamicFilterAPI.Controllers
 
             return Ok(data);
         }
-        // SORT COMPONENT INTERGREATED 
+
+        // ✅ SORT
         [HttpGet("sort")]
         public IActionResult GetSortedData(
             string dataset,
             string sortColumn,
             string sortOrder)
         {
-            //  validate dataset
             if (!allowedTables.Contains(dataset))
                 return BadRequest("Invalid dataset");
 
-            //  load data
             string query = $"SELECT * FROM {dataset}";
             var data = ExecuteQuery(query);
 
-            //  Sorting function using linq 
             if (!string.IsNullOrEmpty(sortColumn))
             {
                 if (sortOrder == "asc")
                 {
-                    data = data
-                        .OrderBy(item => item.ContainsKey(sortColumn) ? item[sortColumn] : null)
-                        .ToList();
+                    data = data.OrderBy(item =>
+                        item.ContainsKey(sortColumn)
+                            ? item[sortColumn]?.ToString()
+                            : ""
+                    ).ToList();
                 }
                 else if (sortOrder == "desc")
                 {
-                    data = data
-                        .OrderByDescending(item => item.ContainsKey(sortColumn) ? item[sortColumn] : null)
-                        .ToList();
+                    data = data.OrderByDescending(item =>
+                        item.ContainsKey(sortColumn)
+                            ? item[sortColumn]?.ToString()
+                            : ""
+                    ).ToList();
                 }
             }
 
             return Ok(data);
         }
 
+        // ✅ MULTI-FILTER (MAIN FEATURE 🔥)
+        [HttpPost("multi-filter")]
+        public IActionResult GetMultiFilteredData(
+            [FromBody] MultiFilterRequest request)
+        {
+            if (!allowedTables.Contains(request.Dataset))
+                return BadRequest("Invalid dataset");
+
+            string query = $"SELECT * FROM {request.Dataset}";
+            var data = ExecuteQuery(query);
+
+            // ✅ APPLY MULTI-FILTER
+            foreach (var filter in request.Filters)
+            {
+                var column = filter.Key;
+                var values = filter.Value;
+
+                // case-insensitive + trimmed
+                values = values.Select(v => v.Trim().ToLower()).ToList();
+
+                data = data.Where(item =>
+                    item.ContainsKey(column) &&
+                    values.Contains(item[column]?.ToString()?.Trim().ToLower())
+                ).ToList();
+            }
+
+            return Ok(data);
+        }
     }
 }

@@ -27,7 +27,14 @@ export class DynamicFilterComponent implements OnInit {
 
   public isnumber: boolean = false; // for checking number for column
 
-  public sortOrder: string = ''; // for 
+  public sortOrder: string = ''; // for sorting order
+
+  public columnValues: any[] = []; // for unique values of column for dropdown
+  public filteredData: any[] = []; // for filtered data to show in dropdown
+  public searchText: string = ''; // for search in dropdown
+  public selectedValue: any[] = []; // for selected value in dropdown
+
+
   constructor(private dynamicFilterService: DynamicFilterService) { }
 
   ngOnInit(): void {
@@ -67,6 +74,12 @@ export class DynamicFilterComponent implements OnInit {
 
     const values = this.data
       .map(item => item[this.selectedColumn]);
+
+    this.columnValues = [...new Set(values)]; // unique values for dropdown
+    this.filteredData = this.columnValues; // initialize filtered data for dropdown
+    this.selectedValue = []; // reset selected value in dropdown
+    this.searchText = ''; // reset search text for dropdown
+
 
     // Check if numeric
     this.isnumber = values.every(val => !isNaN(val));
@@ -154,8 +167,51 @@ export class DynamicFilterComponent implements OnInit {
         if (res.length > 0) {
           this.tableKeys = Object.keys(res[0]);
         }
-      });
+      });}
+    // 
+
+    filterDropdown() {
+
+      const search = this.searchText.toLowerCase();
+
+      this.filteredData = this.columnValues.filter(val =>
+        val.toString().toLowerCase().includes(search)
+      );
+    }
+    toggleSelection(value: any) {
+
+  const index = this.selectedValue.indexOf(value);
+
+  if (index === -1) {
+    this.selectedValue.push(value);  //  add
+  } else {
+    this.selectedValue.splice(index, 1); //  remove
   }
 }
+applyMultiFilter() {
+
+  if (!this.selectedColumn || this.selectedValue.length === 0) return;
+
+  const payload = {
+    dataset: this.selectedDataset,
+    filters: {
+      [this.selectedColumn]: this.selectedValue.map((v: { toString: () => any; }) => v.toString())
+    }
+  };
+
+  this.dynamicFilterService.getMultiFilteredData(payload)
+    .subscribe((res: any) => {
+
+      this.data = res;
+
+      if (res.length > 0) {
+        this.tableKeys = Object.keys(res[0]);
+      }
+
+    });
+}
+
+  }
+
 
 
