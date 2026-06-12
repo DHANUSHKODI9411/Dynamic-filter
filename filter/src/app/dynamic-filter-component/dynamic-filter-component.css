@@ -1,4 +1,4 @@
-/* ✅ GLOBAL */
+/* ===== GLOBAL ===== */
 body {
   font-family: 'Inter', 'Segoe UI', sans-serif;
   background: #f4f6f9;
@@ -7,7 +7,7 @@ body {
   color: #2c3e50;
 }
 
-/* ✅ TITLE */
+/* ===== TITLE ===== */
 .title {
   text-align: center;
   font-size: 30px;
@@ -16,62 +16,85 @@ body {
   margin-bottom: 25px;
 }
 
-/* ✅ TOP BAR */
+/* ===== TOP BAR ===== */
 .top-bar {
   display: flex;
   justify-content: center;
   gap: 12px;
   margin-bottom: 25px;
+  flex-wrap: wrap;
 }
 
 .top-bar select,
 .top-bar button {
   padding: 10px 14px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #d0d5dd;
+  font-size: 14px;
+  background: #fff;
 }
 
-/* ✅ FILTER CARD */
+.top-bar button {
+  background: #4c84ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.top-bar button:hover {
+  background: #3a6de0;
+}
+
+.top-bar button:disabled {
+  background: #cfd8e6;
+  cursor: not-allowed;
+}
+
+/* ===== FILTER CARD ===== */
 .filter-bar {
   width: 92%;
   margin: 0 auto 25px auto;
   padding: 25px;
   background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
   border: 1px solid #eaeaea;
 }
 
-/* ✅ MAIN ROW (LEFT + RIGHT SPLIT) */
+/* ===== MAIN LAYOUT ===== */
 .filter-row {
   display: flex;
   gap: 40px;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
-/* ✅ LEFT SIDE (Column + Sort) */
+/* ===== LEFT SIDE ===== */
 .left-group {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  min-width: 220px;
 }
 
-/* ✅ RIGHT SIDE (Operator + Search) */
+/* ===== RIGHT SIDE ===== */
 .right-group {
   display: flex;
   flex-direction: column;
   gap: 15px;
   flex: 1;
+  min-width: 300px;
 }
 
-/* ✅ FIELD */
+/* ===== FIELD GROUP ===== */
 .field-group {
   display: flex;
   flex-direction: column;
   min-width: 180px;
 }
 
-/* ✅ LABEL */
+/* ===== LABELS ===== */
 .filter-label {
   font-size: 13px;
   color: #6c757d;
@@ -79,7 +102,7 @@ body {
   font-weight: 500;
 }
 
-/* ✅ INPUTS */
+/* ===== INPUTS / SELECTS ===== */
 select,
 input {
   padding: 10px 12px;
@@ -90,7 +113,6 @@ input {
   transition: all 0.2s ease;
 }
 
-/* ✅ INPUT FOCUS */
 select:focus,
 input:focus {
   border-color: #4c84ff;
@@ -98,42 +120,36 @@ input:focus {
   outline: none;
 }
 
-/* ✅ SORT SECTION */
+/* ===== SORT SECTION ===== */
 .sort-group {
   margin-top: 5px;
 }
 
-/* ✅ SORT BUTTON CONTAINER */
 .sort-buttons {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
-/* ✅ ASC BUTTON */
+.asc-btn,
+.desc-btn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  color: white;
+}
+
 .asc-btn {
   background: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: 0.2s ease;
 }
 
-/* ✅ DESC BUTTON */
 .desc-btn {
   background: #f44336;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: 0.2s ease;
 }
 
-/* ✅ HOVER EFFECT */
 .asc-btn:hover {
   background: #3e8e41;
   transform: translateY(-2px);
@@ -144,20 +160,21 @@ input:focus {
   transform: translateY(-2px);
 }
 
-/* ✅ DISABLED */
 .sort-buttons button:disabled {
   background: #ccc;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* ✅ BUTTON GROUP */
+/* ===== BUTTON GROUP ===== */
 .button-group {
   display: flex;
   gap: 12px;
-  margin-top: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
 }
 
-/* ✅ APPLY BUTTON */
+/* ===== APPLY BUTTON ===== */
 .apply-btn {
   background: linear-gradient(135deg, #4c84ff, #6fa8ff);
   color: #fff;
@@ -166,15 +183,22 @@ input:focus {
   border-radius: 10px;
   font-weight: 500;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.2s ease;
 }
 
 .apply-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(76,132,255,0.3);
+  box-shadow: 0 4px 10px rgba(76, 132, 255, 0.25);
 }
 
-/* ✅ RESET BUTTON */
+.apply-btn:disabled {
+  background: #cfd8e6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ===== RESET BUTTON ===== */
 .reset-btn {
   background: #eef1f6;
   color: #555;
@@ -182,40 +206,199 @@ input:focus {
   padding: 10px 22px;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .reset-btn:hover {
   background: #dfe4ea;
 }
 
-/* ✅ TABLE */
+/* ===== MULTI FILTER WRAPPER ===== */
+.multi-filter-wrapper {
+  width: 100%;
+}
+
+/* ===== MULTI SELECT FIELD ===== */
+.multi-field {
+  position: relative;
+  min-width: 320px;
+  width: 100%;
+}
+
+/* ===== MULTI-SELECT BOX ===== */
+.multi-select-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 10px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  background: #fff;
+  flex-wrap: wrap;
+  transition: 0.2s ease;
+}
+
+.multi-select-container:focus-within {
+  border-color: #4c84ff;
+  box-shadow: 0 0 6px rgba(76, 132, 255, 0.25);
+}
+
+/* ===== TAG AREA ===== */
+.selected-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+/* ===== TAG ===== */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eef4ff;
+  border: 1px solid #c7dbff;
+  color: #2c3e50;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* ===== TAG REMOVE ===== */
+.tag-remove {
+  border: none;
+  background: transparent;
+  color: #555;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+}
+
+.tag-remove:hover {
+  color: #d32f2f;
+}
+
+/* ===== SEARCH INPUT INSIDE MULTI SELECT ===== */
+.multi-search-input {
+  border: none;
+  outline: none;
+  min-width: 140px;
+  flex: 1;
+  padding: 4px;
+  font-size: 14px;
+  background: transparent;
+  color: #2c3e50;
+}
+
+/* ===== CLEAR ALL ===== */
+.clear-all {
+  display: flex;
+  align-items: center;
+}
+
+.clear-all-btn {
+  border: none;
+  background: #f2f4f7;
+  color: #555;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.clear-all-btn:hover {
+  background: #e4e7ec;
+}
+
+/* ===== DROPDOWN LIST ===== */
+.dropdown-list {
+  list-style: none;
+  margin: 6px 0 0 0;
+  padding: 0;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+}
+
+/* ===== DROPDOWN ROW ===== */
+.dropdown-row {
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== DROPDOWN ITEM ===== */
+.dropdown-item {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f4f8ff;
+}
+
+/* ===== ACTIVE ITEM ===== */
+.active-item .dropdown-item {
+  background: #eaf2ff;
+}
+
+/* ===== NO RESULTS ===== */
+.no-results {
+  padding: 10px 12px;
+  color: #888;
+  font-size: 14px;
+}
+
+/* ===== TABLE ===== */
 .data-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-/* ✅ HEADER */
+/* ===== TABLE HEADER ===== */
 .data-table th {
   background-color: #222;
   color: #ffd700;
   padding: 12px;
   border: 1px solid #444;
+  text-align: center;
 }
 
-/* ✅ CELL */
+/* ===== TABLE CELL ===== */
 .data-table td {
   padding: 10px;
   border: 1px solid #333;
   text-align: center;
 }
 
-/* ✅ ROW HOVER */
+/* ===== ROW HOVER ===== */
 .data-table tbody tr:hover {
   background: #f5f9ff;
 }
 
-/* ✅ RESPONSIVE */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .filter-row {
     flex-direction: column;
@@ -231,36 +414,21 @@ input:focus {
     flex-direction: column;
     align-items: center;
   }
-}
-.multi-select-box {
-  margin-top: 10px;
-  width: 220px;
-}
 
-/* ✅ search input */
-.multi-search {
-  width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-bottom: 8px;
-}
+  .multi-field {
+    min-width: 100%;
+  }
 
-/* ✅ dropdown box */
-.multi-options {
-  max-height: 150px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 8px;
-  background: #fff;
-}
+  .button-group,
+  .sort-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
 
-/* ✅ each option */
-.multi-option {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  padding: 4px 0;
+  .asc-btn,
+  .desc-btn,
+  .apply-btn,
+  .reset-btn {
+    width: 100%;
+  }
 }

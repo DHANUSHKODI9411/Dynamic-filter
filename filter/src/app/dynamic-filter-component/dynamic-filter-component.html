@@ -1,8 +1,7 @@
 <h2 class="title">DYNAMIC TABLE FILTER</h2>
 
-<!-- - TOP BAR -->
+<!-- TOP BAR -->
 <div class="top-bar">
-
   <select [(ngModel)]="selectedDataset">
     <option value="">Select Dataset</option>
     <option value="Cars">Cars</option>
@@ -14,49 +13,14 @@
   <button (click)="loadData()" [disabled]="!selectedDataset">
     Load {{ selectedDataset }}
   </button>
-
-</div>
-<!-- ✅ MULTI SELECT SECTION -->
-<div *ngIf="selectedColumn" class="multi-select-box">
-
-  <!-- ✅ SEARCH INPUT -->
-  <input
-    type="text"
-    [(ngModel)]="searchText"
-    (input)="filterDropdown()"
-    placeholder="Search values..."
-    class="multi-search"
-  />
-
-  <!-- ✅ OPTIONS LIST -->
-  <div class="multi-options">
-
-    <label *ngFor="let val of filteredData" class="multi-option">
-
-      <input
-        type="checkbox"
-        [value]="val"
-        (change)="toggleSelection(val)"
-        [checked]="selectedValue.includes(val)"
-      />
-
-      {{ val }}
-
-    </label>
-
-  </div>
-  <button class="apply-btn" (click)="applyMultiFilter()">
-  Apply Filter
-</button>
-
 </div>
 
-<!-- - FILTER CARD -->
+<!-- FILTER CARD -->
 <div class="filter-bar">
 
   <div class="filter-row">
 
-    <!-- - LEFT SIDE -->
+    <!-- LEFT SIDE -->
     <div class="left-group">
 
       <!-- Column -->
@@ -70,12 +34,10 @@
         </select>
       </div>
 
-      <!-- - SORT BELOW COLUMN -->
+      <!-- Sort -->
       <div class="field-group sort-group">
         <label class="filter-label">Sort</label>
-
         <div class="sort-buttons">
-
           <button class="asc-btn" (click)="sortAsc()" [disabled]="!selectedColumn">
             Sort Ascending
           </button>
@@ -83,13 +45,86 @@
           <button class="desc-btn" (click)="sortDesc()" [disabled]="!selectedColumn">
             Sort Descending
           </button>
+        </div>
+      </div>
 
+      <!-- Multi Select -->
+      <div class="field-group multi-field" *ngIf="selectedColumn">
+        <label class="filter-label">Multi Select</label>
+
+        <div class="multi-select-container">
+
+          <!-- Selected tags for current column -->
+          <div class="selected-tags">
+            <div class="tag" *ngFor="let item of selectedValue">
+              {{ item }}
+              <button
+                type="button"
+                class="tag-remove"
+                (click)="toggleSelection(item)">
+                ×
+              </button>
+            </div>
+
+            <!-- Search inside multi-select -->
+            <input
+              type="text"
+              class="multi-search-input"
+              [(ngModel)]="searchText"
+              (input)="filterDropdown()"
+              [placeholder]="selectedValue.length === 0 ? 'Type to search values...' : ''"
+            />
+          </div>
+
+          <!-- Clear current column selection -->
+          <div class="clear-all" *ngIf="selectedValue.length > 0">
+            <button
+              type="button"
+              class="clear-all-btn"
+              (click)="clearCurrentColumnSelection()">
+              Clear
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Dropdown list -->
+        <div class="dropdown-list" *ngIf="searchText.trim() !== ''">
+
+          <div *ngIf="filteredData.length > 0">
+
+            <div
+              *ngFor="let val of filteredData"
+              class="dropdown-row"
+              (mousedown)="toggleSelection(val)">
+
+              <button type="button" class="dropdown-item">
+                {{ val }}
+              </button>
+
+            </div>
+
+          </div>
+
+          <div *ngIf="filteredData.length === 0" class="no-results">
+            No matching values found
+          </div>
+        </div>
+
+        <!-- Apply multi filter -->
+        <div class="button-group">
+          <button
+            class="apply-btn"
+            (click)="applyMultiFilter()"
+            [disabled]="selectedValue.length === 0 && selectedFiltersCount === 0">
+            Apply Multi Filter
+          </button>
         </div>
       </div>
 
     </div>
 
-    <!-- - RIGHT SIDE -->
+    <!-- RIGHT SIDE -->
     <div class="right-group">
 
       <!-- Operator -->
@@ -101,11 +136,10 @@
         </select>
       </div>
 
-      <!-- - CONTAINS -->
-      <div *ngIf="selectedOperator === 'contains'">
-
+      <!-- Normal contains search -->
+      <div *ngIf="selectedOperator === 'contains'" class="contains-box">
         <div class="field-group">
-          <label class="filter-label">Search</label>
+          <label class="filter-label">Contains Search</label>
           <input [(ngModel)]="searchValue" placeholder="Enter value..." />
         </div>
 
@@ -118,18 +152,18 @@
             Reset
           </button>
         </div>
-
       </div>
 
-      <!-- - RANGE -->
-      <div *ngIf="selectedOperator === 'range'">
+      <!-- Range -->
+      <div *ngIf="selectedOperator === 'range'" class="range-box">
 
         <div class="field-group">
           <label class="filter-label">Min</label>
           <select [(ngModel)]="minValue">
             <option value="">Select Min value</option>
-
-            <option *ngFor="let val of rangeValue.filter(v => !maxValue || v < maxValue)" [value]="val">
+            <option
+              *ngFor="let val of rangeValue.filter(v => !maxValue || v < maxValue)"
+              [value]="val">
               {{ val }}
             </option>
           </select>
@@ -139,8 +173,9 @@
           <label class="filter-label">Max</label>
           <select [(ngModel)]="maxValue">
             <option value="">Select Max value</option>
-
-            <option *ngFor="let val of rangeValue.filter(v => !minValue || v > minValue)" [value]="val">
+            <option
+              *ngFor="let val of rangeValue.filter(v => !minValue || v > minValue)"
+              [value]="val">
               {{ val }}
             </option>
           </select>
@@ -155,18 +190,43 @@
             Reset
           </button>
         </div>
-
       </div>
 
     </div>
 
   </div>
 
+  <!-- ALL APPLIED FILTERS SUMMARY -->
+  <div class="all-filters-box" *ngIf="selectedFiltersCount > 0">
+    <label class="filter-label">Applied Filters</label>
+
+    <div class="all-filters-list">
+      <div class="filter-group-chip" *ngFor="let entry of selectedFilters | keyvalue">
+
+        <div *ngIf="entry.value.length > 0" class="filter-column-block">
+          <span class="filter-column-name">{{ entry.key }}</span>
+
+          <div class="filter-values">
+            <span class="filter-tag" *ngFor="let val of entry.value">
+              {{ val }}
+              <button
+                type="button"
+                class="filter-tag-remove"
+                (click)="toggleSelectionFromSummary(entry.key, val)">
+                ×
+              </button>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<!-- - TABLE -->
+<!-- TABLE -->
 <table class="data-table">
-
   <thead>
     <tr>
       <th *ngFor="let key of tableKeys">
@@ -182,5 +242,4 @@
       </td>
     </tr>
   </tbody>
-
 </table>

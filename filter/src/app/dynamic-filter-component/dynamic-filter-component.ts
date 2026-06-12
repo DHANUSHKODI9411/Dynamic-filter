@@ -12,28 +12,34 @@ import { FormsModule } from '@angular/forms';
 })
 export class DynamicFilterComponent implements OnInit {
 
-  public data: any[] = []; //  data for table
-  public tableKeys: string[] = [];// keys of the data objects for dynamic table headers
+  public data: any[] = [];
+  public tableKeys: string[] = [];
 
-  public selectedDataset: string = ''; // default dataset
-  public selectedColumn: string = ''; // selected column for filtering
-  public selectedOperator: string = 'contains'; // selected filter operator 
+  public selectedDataset: string = '';
+  public selectedColumn: string = '';
+  public selectedOperator: string = 'contains';
 
-  public searchValue: string = ''; // value  for filtering
-  public minValue: number | null = null; // minimum value for range filters 
-  public maxValue: number | null = null; // maximum value for range filters 
+  public searchValue: string = '';
+  public minValue: number | null = null;
+  public maxValue: number | null = null;
 
-  public rangeValue: number[] = []; // holds the range values for range filters 
+  public rangeValue: number[] = [];
+  public isnumber: boolean = false;
+  public sortOrder: string = '';
 
-  public isnumber: boolean = false; // for checking number for column
+  // Multi-select UI state for current column
+  public columnValues: any[] = [];
+  public filteredData: any[] = [];
+  public searchText: string = '';
+  public selectedValue: any[] = [];
 
-  public sortOrder: string = ''; // for sorting order
+  // Store selected values per column
+  public selectedFilters: { [key: string]: string[] } = {};
 
-  public columnValues: any[] = []; // for unique values of column for dropdown
-  public filteredData: any[] = []; // for filtered data to show in dropdown
-  public searchText: string = ''; // for search in dropdown
-  public selectedValue: any[] = []; // for selected value in dropdown
-
+  // Count how many columns currently have filters
+  get selectedFiltersCount(): number {
+    return Object.keys(this.selectedFilters).length;
+  }
 
   constructor(private dynamicFilterService: DynamicFilterService) { }
 
@@ -41,25 +47,30 @@ export class DynamicFilterComponent implements OnInit {
     this.loadData();
   }
 
-
-  // FOR LOAD DATA
+  // LOAD DATA
   loadData() {
+    if (!this.selectedDataset) return;
+
     this.dynamicFilterService.getData(this.selectedDataset)
       .subscribe((data: any) => {
-
         this.data = data;
 
         if (data.length > 0) {
           this.tableKeys = Object.keys(data[0]);
+        } else {
+          this.tableKeys = [];
         }
 
         this.rangeValue = [];
+
+        if (this.selectedColumn) {
+          this.onColumnChange();
+        }
       });
   }
 
+  // RESET ALL FILTERS
   resetFilter() {
-
-    // for clear filter fields
     this.searchValue = '';
     this.minValue = null;
     this.maxValue = null;
@@ -67,68 +78,159 @@ export class DynamicFilterComponent implements OnInit {
     this.selectedColumn = '';
     this.selectedOperator = 'contains';
 
-    // for reload original data
+    this.columnValues = [];
+    this.filteredData = [];
+    this.searchText = '';
+    this.selectedValue = [];
+    this.selectedFilters = {};
+
     this.loadData();
   }
+
+  // HANDLE COLUMN CHANGE
   onColumnChange() {
+    if (!this.selectedColumn) {
+      this.columnValues = [];
+      this.filteredData = [];
+      this.selectedValue = [];
+      this.searchText = '';
+      this.rangeValue = [];
+      this.isnumber = false;
+      return;
+    }
 
     const values = this.data
-      .map(item => item[this.selectedColumn]);
+      .map(item => item[this.selectedColumn])
+      .filter(val => val !== null && val !== undefined);
 
-    this.columnValues = [...new Set(values)]; // unique values for dropdown
-    this.filteredData = this.columnValues; // initialize filtered data for dropdown
-    this.selectedValue = []; // reset selected value in dropdown
-    this.searchText = ''; // reset search text for dropdown
+    // Unique values for dropdown
+    this.columnValues = [...new Set(values)];
 
+    // Restore already selected values for current column
+    this.selectedValue = this.selectedFilters[this.selectedColumn]
+      ? [...this.selectedFilters[this.selectedColumn]]
+      : [];
 
-    // Check if numeric
-    this.isnumber = values.every(val => !isNaN(val));
+    // Show values that are not already selected
+    this.filteredData = this.columnValues.filter(val =>
+      !this.selectedValue.includes(val?.toString())
+    );
 
-    // Prepare range values only if numeric
+    this.searchText = '';
+
+    // Detect numeric column
+    this.isnumber = values.length > 0 && values.every(val => !isNaN(Number(val)));
+
+    // Prepare range values if numeric
     if (this.isnumber) {
-      const numericValues = values
-        .map(val => Number(val));
-
-      this.rangeValue = [...new Set(numericValues)]
-        .sort((a, b) => a - b);
+      const numericValues = values.map(val => Number(val));
+      this.rangeValue = [...new Set(numericValues)].sort((a, b) => a - b);
     } else {
       this.rangeValue = [];
     }
 
-    // reset operator if invalid
+    // If current operator is range but selected column is not numeric
     if (!this.isnumber && this.selectedOperator === 'range') {
       this.selectedOperator = 'contains';
     }
   }
 
-  // FOR APPLY FILTER
-  applyFilterUnified(val: any, max?: any) {
+  // FILTER DROPDOWN SEARCH
+  filterDropdown() {
+    const search = this.searchText.toLowerCase().trim();
 
+    this.filteredData = this.columnValues.filter(val => {
+      const text = val?.toString().toLowerCase() || '';
+      const notAlreadySelected = !this.selectedValue.includes(val?.toString());
+      return text.includes(search) && notAlreadySelected;
+    });
+  }
+
+  // TOGGLE SELECTED VALUE FOR CURRENT COLUMN
+  toggleSelection(value: any) {
+    const stringValue = value?.toString();
+
+    if (!this.selectedColumn || !stringValue) return;
+
+    if (!this.selectedFilters[this.selectedColumn]) {
+      this.selectedFilters[this.selectedColumn] = [];
+    }
+
+    const index = this.selectedFilters[this.selectedColumn].indexOf(stringValue);
+
+    if (index === -1) {
+      this.selectedFilters[this.selectedColumn].push(stringValue);
+    } else {
+      this.selectedFilters[this.selectedColumn].splice(index, 1);
+    }
+
+    // Remove empty column array completely
+    if (this.selectedFilters[this.selectedColumn].length === 0) {
+      delete this.selectedFilters[this.selectedColumn];
+    }
+
+    // Sync current view
+    this.selectedValue = this.selectedFilters[this.selectedColumn]
+      ? [...this.selectedFilters[this.selectedColumn]]
+      : [];
+
+    this.filterDropdown();
+  }
+
+  // CLEAR ONLY CURRENT COLUMN SELECTION
+  clearCurrentColumnSelection() {
+    if (!this.selectedColumn) return;
+
+    delete this.selectedFilters[this.selectedColumn];
+    this.selectedValue = [];
+    this.searchText = '';
+    this.filteredData = [...this.columnValues];
+  }
+
+  // REMOVE FILTER FROM APPLIED FILTERS SUMMARY
+  toggleSelectionFromSummary(column: string, value: string) {
+    if (!this.selectedFilters[column]) return;
+
+    this.selectedFilters[column] = this.selectedFilters[column].filter(v => v !== value);
+
+    if (this.selectedFilters[column].length === 0) {
+      delete this.selectedFilters[column];
+    }
+
+    if (this.selectedColumn === column) {
+      this.selectedValue = this.selectedFilters[column]
+        ? [...this.selectedFilters[column]]
+        : [];
+      this.filterDropdown();
+    }
+  }
+
+  // NORMAL FILTER (CONTAINS / RANGE)
+  applyFilterUnified(val: any, max?: any) {
     if (!this.selectedColumn) return;
 
     const params = {
-      dataset: this.selectedDataset, // dataset to filter 
-      column: this.selectedColumn, // column to filter on 
-      filterType: this.selectedOperator, // type of filter 
-      value: val, // value to filter by 
-      max: max // optional max value for range filters 
+      dataset: this.selectedDataset,
+      column: this.selectedColumn,
+      filterType: this.selectedOperator,
+      value: val,
+      max: max
     };
 
     this.dynamicFilterService.getFilteredData(params)
       .subscribe((res: any) => {
-
         this.data = res;
 
         if (res.length > 0) {
           this.tableKeys = Object.keys(res[0]);
+        } else {
+          this.tableKeys = [];
         }
       });
   }
 
-  // FOR APPLY SORT 
-
+  // SORT ASC
   sortAsc() {
-
     if (!this.selectedColumn) return;
 
     const params = {
@@ -139,18 +241,18 @@ export class DynamicFilterComponent implements OnInit {
 
     this.dynamicFilterService.getSortedData(params)
       .subscribe((res: any) => {
-
         this.data = res;
 
         if (res.length > 0) {
           this.tableKeys = Object.keys(res[0]);
+        } else {
+          this.tableKeys = [];
         }
       });
   }
 
   // SORT DESC
   sortDesc() {
-
     if (!this.selectedColumn) return;
 
     const params = {
@@ -161,57 +263,44 @@ export class DynamicFilterComponent implements OnInit {
 
     this.dynamicFilterService.getSortedData(params)
       .subscribe((res: any) => {
-
         this.data = res;
 
         if (res.length > 0) {
           this.tableKeys = Object.keys(res[0]);
+        } else {
+          this.tableKeys = [];
         }
-      });}
-    // 
-
-    filterDropdown() {
-
-      const search = this.searchText.toLowerCase();
-
-      this.filteredData = this.columnValues.filter(val =>
-        val.toString().toLowerCase().includes(search)
-      );
-    }
-    toggleSelection(value: any) {
-
-  const index = this.selectedValue.indexOf(value);
-
-  if (index === -1) {
-    this.selectedValue.push(value);  //  add
-  } else {
-    this.selectedValue.splice(index, 1); //  remove
+      });
   }
-}
-applyMultiFilter() {
 
-  if (!this.selectedColumn || this.selectedValue.length === 0) return;
+  // APPLY MULTI-COLUMN FILTER
+  applyMultiFilter() {
+    if (!this.selectedDataset) return;
 
-  const payload = {
-    dataset: this.selectedDataset,
-    filters: {
-      [this.selectedColumn]: this.selectedValue.map((v: { toString: () => any; }) => v.toString())
-    }
-  };
+    const cleanedFilters: { [key: string]: string[] } = {};
 
-  this.dynamicFilterService.getMultiFilteredData(payload)
-    .subscribe((res: any) => {
-
-      this.data = res;
-
-      if (res.length > 0) {
-        this.tableKeys = Object.keys(res[0]);
+    Object.keys(this.selectedFilters).forEach(key => {
+      if (this.selectedFilters[key] && this.selectedFilters[key].length > 0) {
+        cleanedFilters[key] = this.selectedFilters[key];
       }
-
     });
-}
 
+    if (Object.keys(cleanedFilters).length === 0) return;
+
+    const payload = {
+      dataset: this.selectedDataset,
+      filters: cleanedFilters
+    };
+
+    this.dynamicFilterService.getMultiFilteredData(payload)
+      .subscribe((res: any) => {
+        this.data = res;
+
+        if (res.length > 0) {
+          this.tableKeys = Object.keys(res[0]);
+        } else {
+          this.tableKeys = [];
+        }
+      });
   }
-
-
-
+}
